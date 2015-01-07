@@ -7,6 +7,7 @@ from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 import logging
 logging.basicConfig(filename='/tmp/debug.log',level=logging.DEBUG)
+from subprocess import check_call
 
 
 UPLOAD_FOLDER = '/tmp/doc2pdf/'
@@ -27,8 +28,9 @@ def upload_file():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            logging.debug('saving on '+os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            logging.debug('saving on '+os.path.join(app.config['UPLOAD_FOLDER'], 'file.doc'))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'file.doc'))
+            check_call("/var/www/doc2pdf/doc2pdf.sh")
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     logging.debug('GET')
@@ -46,7 +48,7 @@ def upload_file():
 def uploaded_file(filename):
     logging.debug('Request on /work_dir/<something>')
     return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+                               'final.pdf')
 
 if __name__ == '__main__':
     app.run()
