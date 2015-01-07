@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+         WSGIDaemonProcess app
+     WSGIScriptAlias / /var/www/web_doc2pdf/web_doc2pdf.wsgi
+
+     <Directory /var/www/web_doc2pdf>
+            WSGIProcessGroup app
+        WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+     </Directory>
+</VirtualHost>
