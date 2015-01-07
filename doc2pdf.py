@@ -6,10 +6,10 @@ import os
 from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 import logging
-logging.basicConfig(filename='debug.log',level=logging.DEBUG)
+logging.basicConfig(filename='/tmp/debug.log',level=logging.DEBUG)
 
 
-UPLOAD_FOLDER = '/work_dir/'
+UPLOAD_FOLDER = '/tmp/doc2pdf/'
 ALLOWED_EXTENSIONS = set(['doc'])
 
 app = Flask(__name__)
@@ -27,6 +27,7 @@ def upload_file():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            logging.debug('saving on '+os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
