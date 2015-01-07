@@ -30,7 +30,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             logging.debug('saving on '+os.path.join(app.config['UPLOAD_FOLDER'], 'file.doc'))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'file.doc'))
-            check_call("/var/www/doc2pdf/doc2pdf.sh")
+            check_call("/var/www/web_doc2pdf/doc2pdf.sh")
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     logging.debug('GET')
